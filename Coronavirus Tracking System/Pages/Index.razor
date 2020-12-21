@@ -1,0 +1,14 @@
+﻿@using Coronavirus_Tracking_System.Data;
+
+@page "/"
+
+<h1>Coronavirus tracking!</h1>
+
+In this website you can check the Covid-19 situation around the world or in individual countries!
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await StatisticsLoader.LoadStatisticsList();
+    }
+}

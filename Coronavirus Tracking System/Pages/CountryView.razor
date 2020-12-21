@@ -1,0 +1,79 @@
+﻿@using Coronavirus_Tracking_System.Model;
+@using Coronavirus_Tracking_System.Data;
+
+@page "/countryview"
+
+<h3>CountryView</h3>
+
+
+<select class="fl-input" @onchange="ChangeCountry">
+    <option>-----------</option>
+    @foreach (CountryStatistics Country in Countries.Countries)
+    {
+        <option>@Country.Country</option>
+    }
+</select>
+
+<div>
+    <p>@PercentageCured <progress max="100" value="2"></progress> @(100 - PercentageCured)</p>
+</div>
+
+@if (Countries == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (SelectedCountry == null)
+{
+    <p><em>Please select a country!</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Country</td>
+                <td>New Confirmed</td>
+                <td>Total Confirmed</td>
+                <td>New Deaths</td>
+                <td>Total Deaths</td>
+                <td>New Recovered</td>
+                <td>Total Recovered</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@SelectedCountry.Country</td>
+                <td>@SelectedCountry.NewConfirmed</td>
+                <td>@SelectedCountry.TotalConfirmed</td>
+                <td>@SelectedCountry.NewDeaths</td>
+                <td>@SelectedCountry.TotalDeaths</td>
+                <td>@SelectedCountry.NewRecovered</td>
+                <td>@SelectedCountry.TotalRecovered</td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    StatisticsList Countries = StatisticsLoader.StatisticsList;
+    CountryStatistics SelectedCountry = null;
+    int PercentageCured = 2;
+
+    public void ChangeCountry(ChangeEventArgs eventArgs)
+    {
+        string CountryName = eventArgs.Value.ToString();
+        SelectedCountry = UpdateInformation(CountryName);
+    }
+
+    private CountryStatistics UpdateInformation(string CountryName)
+    {
+        foreach (CountryStatistics Country in Countries.Countries)
+        {
+            if (CountryName == Country.Country)
+            {
+                return Country;
+            }
+        }
+        return SelectedCountry;
+    }
+}

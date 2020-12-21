@@ -1,0 +1,54 @@
+﻿@using Coronavirus_Tracking_System.Model;
+@using Coronavirus_Tracking_System.Data;
+
+@page "/globalview"
+
+<h3>GlobalView</h3>
+
+@if (Countries == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Country</td>
+                <td>New Confirmed</td>
+                <td>Total Confirmed</td>
+                <td>New Deaths</td>
+                <td>Total Deaths</td>
+                <td>New Recovered</td>
+                <td>Total Recovered</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Global</td>
+                <td>@Countries.Global.NewConfirmed</td>
+                <td>@Countries.Global.TotalConfirmed</td>
+                <td>@Countries.Global.NewDeaths</td>
+                <td>@Countries.Global.TotalDeaths</td>
+                <td>@Countries.Global.NewRecovered</td>
+                <td>@Countries.Global.TotalRecovered</td>
+            </tr>
+            @foreach (CountryStatistics Country in Countries.Countries)
+            {
+                <tr>
+                    <td>@Country.Country</td>
+                    <td>@Country.NewConfirmed</td>
+                    <td>@Country.TotalConfirmed</td>
+                    <td>@Country.NewDeaths</td>
+                    <td>@Country.TotalDeaths</td>
+                    <td>@Country.NewRecovered</td>
+                    <td>@Country.TotalRecovered</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    StatisticsList Countries = StatisticsLoader.StatisticsList;
+}
