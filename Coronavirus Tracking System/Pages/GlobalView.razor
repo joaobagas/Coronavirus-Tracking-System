@@ -11,6 +11,9 @@
 }
 else
 {
+    <div style=" height: 100%; width: 100%; justify-content: center; display: flex; align-items: center;">
+        <p>@(PercentageCured + "%") <progress max="100" value="@PercentageCured"></progress> @((100 - PercentageCured) + "%")</p>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -51,4 +54,12 @@ else
 
 @code {
     StatisticsList Countries = StatisticsLoader.StatisticsList;
+    int PercentageCured;
+
+    protected override async Task OnInitializedAsync()
+    {
+        double TotalClosedCases = Countries.Global.TotalRecovered + Countries.Global.TotalDeaths;
+        double TotalRecovered = Countries.Global.TotalRecovered;
+        PercentageCured = (int)Math.Floor((TotalRecovered / TotalClosedCases) * 100);
+    }
 }

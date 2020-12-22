@@ -14,10 +14,6 @@
     }
 </select>
 
-<div>
-    <p>@PercentageCured <progress max="100" value="2"></progress> @(100 - PercentageCured)</p>
-</div>
-
 @if (Countries == null)
 {
     <p><em>Loading...</em></p>
@@ -28,6 +24,9 @@ else if (SelectedCountry == null)
 }
 else
 {
+    <div style=" height: 100%; width: 100%; justify-content: center; display: flex; align-items: center;">
+        <p>@(PercentageCured + "%") <progress max="100" value="@PercentageCured"></progress> @((100 - PercentageCured) + "%")</p>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -57,12 +56,13 @@ else
 @code {
     StatisticsList Countries = StatisticsLoader.StatisticsList;
     CountryStatistics SelectedCountry = null;
-    int PercentageCured = 2;
+    int PercentageCured;
 
     public void ChangeCountry(ChangeEventArgs eventArgs)
     {
         string CountryName = eventArgs.Value.ToString();
         SelectedCountry = UpdateInformation(CountryName);
+        UpdateBar();
     }
 
     private CountryStatistics UpdateInformation(string CountryName)
@@ -75,5 +75,12 @@ else
             }
         }
         return SelectedCountry;
+    }
+
+    private void UpdateBar()
+    {
+        double TotalClosedCases = SelectedCountry.TotalRecovered + SelectedCountry.TotalDeaths;
+        double TotalRecovered = SelectedCountry.TotalRecovered;
+        PercentageCured = (int) Math.Floor((TotalRecovered / TotalClosedCases) * 100);
     }
 }
